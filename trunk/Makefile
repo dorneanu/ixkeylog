@@ -32,7 +32,7 @@ MV = mv
 
 # Flags
 CFLAGS = -W -Wall -O2
-LDFLAGS = -largtable2 -lX11
+LDFLAGS = -lX11
 
 # Default (dir) locations
 SRCDIR = src

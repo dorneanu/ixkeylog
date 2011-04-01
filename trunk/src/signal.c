@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include "signal.h"
 #include "ixkeylog.h"
+#include "args.h"
 
 
 /**

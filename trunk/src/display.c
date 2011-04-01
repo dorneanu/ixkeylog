@@ -40,6 +40,7 @@
 #include <X11/Intrinsic.h>
 #include "ixkeylog.h"
 #include "display.h"
+#include "args.h"
 
 /* Keycodes we'd like to catch */
 char *keycodes[D_KEYCODES_LEN];
@@ -138,7 +139,7 @@ X11LogSess *display_init() {
         sess->focuswin = None;
         
         // Open file descriptor for output
-        if(!strcmp(g_ixkeylog_opts->output,"-"))                        
+        if(!g_ixkeylog_opts->output)                        
             fd = stdout;
         else {
             // TODO: set permissions for created file
@@ -173,9 +174,9 @@ void display_handle_event(X11LogSess *sess) {
     XEvent ev;              /* X11 event object */
     KeyCode kc = -1;        /* Key Code */
     KeySym ks;              /* Key symbol */
-    char *ksname;           /* String representation of ks */
+    char *ksname = NULL;    /* String representation of ks */
     char buf;               /* FIXME: Is this secure? */
-    int len;
+    int len = 0;
     
     XNextEvent(sess->dpy, &ev);
     

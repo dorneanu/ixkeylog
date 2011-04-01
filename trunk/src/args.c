@@ -27,11 +27,31 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <argtable2.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
 #include "ixkeylog.h"
 #include "display.h"
+#include "args.h"
+
+
+/**
+ * Print help message 
+ */
+void args_help() {
+    printf("iXKeyLog - *NIX X11 KeyLogger (c) by %s\n\n", D_IXKEYLOG_AUTHOR);
+    printf("Usage: ixkeylog [--daemon] [--debug] [-h] [-o output]");
+    printf(" [--version] [-x DISPLAY]\n\n");
+    
+    printf("   --daemon     - Run process as daemon\n");
+    printf("   --debug      - Run with debug messages\n");
+    printf("   -h           - Print help message\n");
+    printf("   -o <output>  - Specify where to dump data (default: stdout)\n");
+    printf("   --version    - Print version\n");
+    printf("   -x <display> - Specify which DISPLAY should be used ");
+    printf("(default: getenv(\"DISPLAY\"))\n");
+}
 
 
 /**
@@ -41,104 +61,58 @@
  * @param argv The parameters
  * @return own options structure (ixkeylog_opts)
  */
-ixkeylog_opts *args_check(int argc, char **argv) 
+ixkeylog_opts *args_check(int argc, char **argv)
 {
     ixkeylog_opts *opts;
-    
-    /* 
-     * Define the allowable command line options, 
-     * collecting them in argtable[]
-     */
-    struct arg_lit *daemon = arg_lit0(
-            "D","daemon","- run as daemon in the background");
-            
-    struct arg_lit *debug = arg_lit0(
-            "d","debug","- show debug messages");
-            
-    struct arg_lit *help = arg_lit0(
-            "h","help","- print this help and exit");
-            
-    struct arg_file *output = arg_file0(
-            "o","output","<output>", "- where to log data (default is \"-\")");
-
-    struct arg_lit *vers = arg_lit0(
-            "V","version","- print version information and exit");
-            
-    struct arg_file *display = arg_file0(
-            "x","display","<display>", "- display to use (default is env(\"DISPLAY\"))");
-            
-    struct arg_end *end  = arg_end(20);
-    void* argtable[] = {
-                debug, 
-                daemon, 
-                help, 
-                vers,  
-                output, 
-                display,
-                end};
-                
-    int nerrors;
-
-    
-    /* verify the argtable[] entries were allocated sucessfully */
-    if (arg_nullcheck(argtable) != 0)
-    {
-        // NULL entries were detected
-        fprintf(stderr, "Insufficient memory\n");
-        return NULL;
-    }
+    static char *opts_name = NULL;
+    int option_index = 0;
+    int c;
     
     /* Allocate memory for own opts structure */
-    if((opts = malloc(sizeof(struct _opts))) == NULL) {
-        fprintf(stderr, "Insufficient memory\n");
-        return NULL;
-    }
+    if((opts = malloc(sizeof(struct _opts))) == NULL)
+        M_DISPLAY_ERROR;
     
-    
-    /* Set default values */
-    output->filename[0]="-";
+    /* Parse parameters */
+    while((c = getopt_long(
+            argc, argv, 
+            short_options, long_options, 
+            &option_index
+         )) != 1) 
+    {
+        /* Detect the end of the options. */
+        if (c == -1)
+            break;
+            
+        switch (c) {
+            case 0:
+                opts_name = (char *)long_options[option_index].name;
+                
+                if(args_debug_flag)
+                    opts->debug = 1;
+                else if(args_daemonize_flag)
+                    opts->daemon = 1;
+                    
+                break;
+            
+            case 'h':
+                args_help();
+                exit(EXIT_SUCCESS);
+                
+            case 'o':
+                opts->output = optarg;
+                break;
+                
+            case 'x':
+                opts->display = optarg;
+                
+            case '?':
+                /* getopt_long already printed an error message. */
+                break;
 
-    /* Parse the command line as defined by argtable[] */
-    nerrors = arg_parse(argc,argv,argtable);
-    
-    /* Check parameters */
-    if (help->count > 0)  {
-        printf("iXKeyLog - *NIX X11 KeyLogger (c) by %s\n\n", D_IXKEYLOG_AUTHOR);
-        printf("Usage: %s", argv[0]);
-        arg_print_syntax(stdout,argtable,"\n");
-        arg_print_glossary(stdout,argtable,"  %-10s %s\n");
-        exit(EXIT_SUCCESS);
+            default:
+                break;
+        }
     }
-    
-    if (vers->count > 0) {
-        printf("iXKeyLog - *NIX X11 KeyLogger (c) by %s\n", D_IXKEYLOG_AUTHOR);
-        printf("Version: %s\n", D_IXKEYLOG_VERSION);
-        exit(EXIT_SUCCESS);
-    }
-    
-    /* If the parser returned any errors then display them and exit */
-    if (nerrors > 0) {
-        /* Display the error details contained in the arg_end struct.*/
-        arg_print_errors(stdout, end, argv[0]);
-        printf("Try '%s --help' for more information.\n", argv[0]);
-        return NULL;
-    }
-    
-    // Fill in opts with collected arguments
-    opts->daemon    = daemon->count;
-    opts->output    = output->filename[0];
-    opts->display   = display->filename[0]; 
-    opts->debug     = debug->count;
-    
-    
-    /*** DEBUG ********************************************************/
-    if(opts->debug > 0) {
-        M_DEBUG_INFO("opts->daemon: %d\n", opts->daemon); 
-        M_DEBUG_INFO("opts->output: %s\n", opts->output);
-        M_DEBUG_INFO("opts->display: %s\n", opts->display);
-        M_DEBUG_INFO("opts->debug: %d\n", opts->debug);
-    }
-    /******************************************************************/
     
     return opts;
 }

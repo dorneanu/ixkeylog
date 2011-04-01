@@ -2,7 +2,7 @@
  iXKeyLog - Copyright (c) 2011 by Victor Dorneanu
  All rights reserved. 
  
- ixkeylog.h
+ args.h - Check arguments
 
  Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
@@ -27,23 +27,55 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef __IXKEYLOG_H__
-#define __IXKEYLOG_H__
+#ifndef __ARGS_H__
+#define __ARGS_H__
 
-#include "display.h"
+#include <unistd.h>
+#include <getopt.h>
 
-#define D_IXKEYLOG_VERSION    "0.1_alpha"
-#define D_IXKEYLOG_AUTHOR     "Victor Dorneanu"
+
+/* Useful variables */
+static int args_debug_flag             = 0;
+static int args_daemonize_flag         = 0;
+static int args_version_flag           = 0;
+
+/* Short options */
+static const char *short_options = "ho:x:";
 
 
 /**
- * Useful macros
+ * Long options for getopts
  */
-#define M_DISPLAY_ERROR fprintf(stderr, ">> Error: %s\n", strerror(errno))
-#define M_DEBUG_INFO(format, args...) \
-        fprintf(stdout, "[DEBUG] (" __FILE__ ") " format, args);
-        
-#define M_ERROR(e)      { M_DISPLAY_ERROR; exit(e); }
+static const struct option long_options[] =
+{
+    /* These arguments set flags */
+    {"debug",       0,    &args_debug_flag,     1},
+    {"daemon",      0,    &args_daemonize_flag, 1},
+    {"version",     0,    &args_version_flag,   1},
+    
+    /* These ones require arguments */
+    {"output",  1, 0, 'o'},
+    {"display", 1, 0, 'x'},
+    {0, 0, 0, 0}
+};
+
+/** 
+ * Own options structures
+ */
+typedef struct _opts {
+    const char *display;        /** Where to log */
+    const char *output;         /** Where to dump logged data */
+    int daemon;                 /** Daemonize process? */
+    int debug;                  /** Show debug information */
+} ixkeylog_opts;
 
 
-#endif /* ixkeylog.h */
+/* Function declarations */
+ixkeylog_opts *args_check(int, char **);
+
+
+/* Global stuff */
+ixkeylog_opts *g_ixkeylog_opts;
+
+
+#endif /* args.h */

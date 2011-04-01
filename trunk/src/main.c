@@ -37,12 +37,12 @@
 #include "signal.h"
 #include "display.h"
 #include "ixkeylog.h"
+#include "args.h"
 
 
 /* Global stuff */
 ixkeylog_opts *opts;
 X11LogSess *sess;
-
 
 
 /**
@@ -61,7 +61,6 @@ int main(int argc, char** argv)
     /* Set global structure pointer */
     g_ixkeylog_opts = opts; 
     
-        
     /* Initialize display */
     sess = display_init();
     
