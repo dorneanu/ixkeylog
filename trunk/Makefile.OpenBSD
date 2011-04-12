@@ -1,7 +1,7 @@
 # iXKeyLog - Copyright (c) 2011 by Victor Dorneanu
 # All rights reserved. 
 #
-# Makefile.FreeBSD
+# Makefile.OpenBSD
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -31,8 +31,8 @@ RM = rm -rf
 MV = mv
 
 # Flags
-CFLAGS = -W -Wall -O2 -I /usr/local/include
-LDFLAGS =  -L /usr/local/lib -lX11 
+CFLAGS = -W -Wall -O2  -I /usr/X11R6/include
+LDFLAGS =  -L /usr/X11R6/lib -R /usr/X11R6/lib -lX11 
 
 # Default (dir) locations
 SRCDIR = src
