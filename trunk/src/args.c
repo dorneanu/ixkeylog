@@ -18,7 +18,7 @@
  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, IysNDIRECT,
  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
@@ -39,8 +39,13 @@
 /**
  * Print help message 
  */
-void args_help() {
+static void args_banner () {
     printf("iXKeyLog - *NIX X11 KeyLogger (c) by %s\n\n", D_IXKEYLOG_AUTHOR);
+}
+
+
+static void args_help() {
+    args_banner();
     printf("Usage: ixkeylog [--daemon] [--debug] [-h] [-o output]");
     printf(" [--version] [-x DISPLAY]\n\n");
     
@@ -87,10 +92,16 @@ ixkeylog_opts *args_check(int argc, char **argv)
             case 0:
                 opts_name = (char *)long_options[option_index].name;
                 
-                if(args_debug_flag)
+                if(args_debug_flag)                 /* --debug */
                     opts->debug = 1;
-                else if(args_daemonize_flag)
+                else if(args_daemonize_flag)        /* --daemon */
                     opts->daemon = 1;
+                else if(args_version_flag) {        /* --version */
+                    opts->version = 1;
+                    args_banner();
+                    printf("Version: %s\n", D_IXKEYLOG_VERSION);
+                    exit(EXIT_SUCCESS);
+                }
                     
                 break;
             

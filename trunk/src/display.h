@@ -73,7 +73,7 @@ static const KEYCODEMAP keycodes_table[] = {
     {22,    "[BACKSPACE]"},
     {23,    "[TAB]"},
     {36,    "[ENTER]\n"},
-    {37,    ""},                    /* CONTROL L */
+    {37,    "[CTRL_L]"},            /* CONTROL L */
     {50,    ""},                    /* SHIFT L */
     {62,    ""},                    /* SHIFT R */
     {64,    ""},                    /* ALT L */
@@ -90,7 +90,7 @@ static const KEYCODEMAP keycodes_table[] = {
     {92,    ""},                    /* ALT GR */
     {95,    "[F11]"},
     {96,    "[F12]"},
-    {105,   ""},                    /* CONTROL R */
+    {105,   "[CTRL_R]"},            /* CONTROL R */
     {110,   "[HOME]"},
     {111,   "[UP]"},
     {112,   "[PRIOR]"},
@@ -118,7 +118,8 @@ static const KEYCODEMAP keycodes_table[] = {
  */
 typedef struct { int cchar; char *name; } CONTROLCHARMAP;
 static const CONTROLCHARMAP controlchars_table[] = {    
-    {0x00,  "<^@>"},        /* Null */
+    {0x00,  ""},        /* Null */
+    {0x01,  "<^A>"},        /* ^A */
     {0x03,  "<^C>"},        /* Ctrl-C */
     {0x07,  "<BEL>"},       /* Bell character */
     {0x08,  ""},            /* BS: BackSpace (^H) */

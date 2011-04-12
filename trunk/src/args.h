@@ -67,6 +67,7 @@ typedef struct _opts {
     const char *output;         /** Where to dump logged data */
     int daemon;                 /** Daemonize process? */
     int debug;                  /** Show debug information */
+    int version;
 } ixkeylog_opts;
 
 
