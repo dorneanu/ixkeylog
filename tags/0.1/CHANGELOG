@@ -1,0 +1,20 @@
+---- 0.1 ----------------------------------------------------------------------
+    
+    * First stable version. 
+
+
+
+---- 0.1_beta -----------------------------------------------------------------
+
+    * Parameters/Arguments: No more argtable2. getopts is used which is on 
+      almost any POSIX system available.
+    
+    * Compilation: Added Makefiles for NetBSD, OpenBSD and FreeBSD.
+
+    * Added signal handling (not implemented yet): signal.{c, h}
+
+
+
+---- 0.1_alpha ----------------------------------------------------------------
+
+    * first buggy release
