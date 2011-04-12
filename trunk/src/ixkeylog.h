@@ -32,7 +32,7 @@
 
 #include "display.h"
 
-#define D_IXKEYLOG_VERSION    "0.1_alpha"
+#define D_IXKEYLOG_VERSION    "0.1"
 #define D_IXKEYLOG_AUTHOR     "Victor Dorneanu"
 
 
