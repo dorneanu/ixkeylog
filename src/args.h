@@ -39,9 +39,6 @@ static int args_debug_flag             = 0;
 static int args_daemonize_flag         = 0;
 static int args_version_flag           = 0;
 
-/* Short options */
-static const char *short_options = "ho:x:";
-
 
 /**
  * Long options for getopts

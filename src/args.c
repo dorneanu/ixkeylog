@@ -69,9 +69,9 @@ static void args_help() {
 ixkeylog_opts *args_check(int argc, char **argv)
 {
     ixkeylog_opts *opts;
-    static char *opts_name = NULL;
     int option_index = 0;
     int c;
+    const char *short_options = "ho:x:";
     
     /* Allocate memory for own opts structure */
     if((opts = malloc(sizeof(struct _opts))) == NULL)
@@ -90,7 +90,7 @@ ixkeylog_opts *args_check(int argc, char **argv)
             
         switch (c) {
             case 0:
-                opts_name = (char *)long_options[option_index].name;
+                //opts_name = (char *)long_options[option_index].name;
                 
                 if(args_debug_flag)                 /* --debug */
                     opts->debug = 1;

@@ -176,7 +176,6 @@ void display_handle_event(X11LogSess *sess) {
     KeySym ks;              /* Key symbol */
     char *ksname = NULL;    /* String representation of ks */
     char buf;               /* FIXME: Is this secure? */
-    int len = 0;
     
     XNextEvent(sess->dpy, &ev);
     
@@ -184,7 +183,7 @@ void display_handle_event(X11LogSess *sess) {
         sess->focuswin = None;
     else if (ev.xany.type == KeyPress) {
         /* XLookupString  handle keyboard input events in Latin-1 */
-        len = XLookupString(&ev.xkey, &buf, 99, &ks, 0);
+        XLookupString(&ev.xkey, &buf, 99, &ks, 0);
         
         /* Find out string representation */
         if(ks == NoSymbol) {
