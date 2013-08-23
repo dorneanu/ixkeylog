@@ -1,0 +1,10 @@
+You won't need to compile the whole stuff by yourself. Just type 'make' in the
+root directory of the package and you'll get the available make targets. Type:
+
+        gmake -f Makefile.[put your OS here] ixkeylog
+
+for compiling the main binary. Use
+
+        gmake -f Makefile.[put your OS here] clean
+
+to cleanup everything. 
