@@ -30,8 +30,11 @@ CC = gcc
 RM = rm -rf
 MV = mv
 
+# Add version to binary
+GIT_VERSION = $(shell sh -c 'git describe --abbrev=4 --always')
+
 # Flags
-CFLAGS = -W -Wall -O2
+CFLAGS = -W -Wall -O2 -D__GIT_VERSION=\"$(GIT_VERSION)\"
 LDFLAGS = -lX11
 
 # Default (dir) locations
