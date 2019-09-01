@@ -61,7 +61,7 @@ help:
 
 
 ixkeylog: $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
 
 
 clean:
